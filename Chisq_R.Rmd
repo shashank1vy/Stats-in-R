@@ -1,0 +1,65 @@
+---
+title: "Chi Square Test"
+author: "Shashank Semwal"
+date: "19 March 2018"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(corrplot)
+```
+
+#A movie producer is bringing out a new movie. In order to map out a advertising campaign, he wants to determin wether the movie will appeal most to a particular age group or whether it will appeal equally to all age group. The producer takes a random sample from persons attending preview of the new movie and obtains the follwoing results.
+
+```{r}
+
+movie.df<-data.frame('Under 20'=c(146,54,20),'20-39'=c(78,22,10),'40-59'=c(48,42,10),'60 and Over'=c(28,22,20))
+row.names(movie.df)<-c('Liked the Movie','Disliked the Movie','Indifferent')
+movie.df
+```
+
+
+#Our Hypothesis
+#H0 : Movies will not appeal any age group
+#H1: Movies will appeal the age groups
+#
+# For X2 (Chi-Square) at 0.05 significance level i.e. 3.84
+
+```{r}
+# Chi square contigency Table
+movies.chi<-chisq.test(as.matrix(movie.df))
+```
+
+```{r}
+# Observed Values
+movies.chi$observed
+
+# Expected Values
+movies.chi$expected
+
+
+```
+
+```{r}
+# Age most constributing To likes, dislike aned indifferent about movies
+corrplot(movies.chi$residuals,is.corr = F)
+
+# we can see from the contribution table that 
+# 1) People above age 60 are most indifferent about movies
+# 2) People age b/w 40-50 mostly disliked the movie
+# 3) Out of many people above age 60 dislked the movie
+# 4) More people disliked the movie rather liked
+
+
+```
+```{r}
+# For n=(3-1)(4-1)=6 for alpha=0.05, Chi-sq = 12.59
+
+movies.chi
+
+#we can see that p-value= 40.589, hence we reject the null hypothsis, Age group do affect the likes and dislikes about movies.
+```
+
+
+
